@@ -3,6 +3,7 @@ package org.khl.chat.client.component;
 import org.khl.chat.client.dto.AppData;
 import org.khl.chat.client.dto.LoginRequestDto;
 import org.khl.chat.client.dto.LoginResponseDto;
+import org.khl.chat.client.dto.RegistrationUserRequest;
 import org.khl.chat.client.dto.UserDto;
 
 import com.google.gwt.core.client.GWT;
@@ -27,74 +28,41 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class LoginPage extends Composite {
+public class RegistrationPage extends Composite {
 	
 	private static final String URL_SIGN_IN = "http://127.0.0.1:8080/auth";
 	private static final String URL_SIGN_UP = "http://127.0.0.1:8080/registration";
 	private static final String CONTENT_TYPE = "Content-Type";
 	private AppData appData = AppData.INSTANCE;
 	
-	interface LoginPageUiBinder extends UiBinder<AbsolutePanel, LoginPage> {}
+	interface RegistrationPageUiBinder extends UiBinder<AbsolutePanel, RegistrationPage> {}
 
-	private static LoginPageUiBinder ourUiBinder = GWT.create(LoginPageUiBinder.class);
+	private static RegistrationPageUiBinder ourUiBinder = GWT.create(RegistrationPageUiBinder.class);
 	private Widget widget = ourUiBinder.createAndBindUi(this);
 	
-	
-	@UiField
-	Button btnSignIn;
 	@UiField
 	Button btnSignUp;
 	@UiField
 	TextBox tbPassword;
 	@UiField
 	TextBox tbEmail;
+	@UiField
+	TextBox tbName;
 	
-	public LoginPage(){
+	public RegistrationPage(){
 		initWidget(widget);
 		
-		btnSignIn.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				LoginRequestDto loginRequest = new LoginRequestDto(tbEmail.getText(), tbPassword.getText());
-				String jsonBody = loginRequest.getJson();
-				sendSignInRest(jsonBody);
-			}
-		});
 		
 		btnSignUp.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				RootPanel.get().clear();
-				RootPanel.get().add(new RegistrationPage());
+				RegistrationUserRequest request = new RegistrationUserRequest(tbName.getText(), tbEmail.getText(), tbPassword.getText());
+				String jsonBody = request.getJson();
+				sendSignUpRest(jsonBody);
 			}
 		});
 	}
 	
-	 private void sendSignInRest(final String jsonString) {
-	        RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL_SIGN_IN);
-
-	        try {
-	            builder.setHeader(CONTENT_TYPE, "application/json");
-	            builder.setRequestData(jsonString);
-	            builder.setCallback( new RequestCallback() {
-	                public void onError(Request request, Throwable exception) {
-	                    Window.alert(exception.getMessage());
-	                }
-	                public void onResponseReceived(Request request, Response response) {
-	                    if (200 == response.getStatusCode()){
-		                	String responseJson = response.getText();
-		                	appData.setFieldsFromJson(responseJson);
-	                    } 
-	                    else {
-	                        Window.alert("Что-то пошло не так: " + response.getStatusText());
-	                    }
-	                }
-	            });
-	            builder.send();
-	        } catch (RequestException e) {
-	            e.printStackTrace();
-	        }
-	 }
 	 
 	 private void sendSignUpRest(final String jsonString) {
 		 RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL_SIGN_UP);
@@ -112,7 +80,8 @@ public class LoginPage extends Composite {
 					 if (201 == response.getStatusCode())
 					 {
 						 Window.alert("Пользователь " + user.getName() + " зарегистрирован. \nМожете авторизоваться.");
-						 
+						RootPanel.get().clear();
+						RootPanel.get().add(new LoginPage());
 					 } else {
 						 Window.alert("Что-то пошло не так: "+ response.getStatusText());
 					 }

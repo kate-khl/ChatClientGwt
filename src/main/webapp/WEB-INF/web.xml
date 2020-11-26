@@ -7,13 +7,13 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>org.khl.chat.server.GreetingServiceImpl</servlet-class>
+    <servlet-name>loginServlet</servlet-name>
+    <servlet-class>org.khl.chat.server.LoginServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/chatclient/greet</url-pattern>
+    <servlet-name>loginServlet</servlet-name>
+    <url-pattern>/chatclient/login</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

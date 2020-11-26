@@ -10,7 +10,7 @@ public interface LoginService extends RemoteService{
 
     void login(String token);
  
-    boolean tokenExist(String a);
+    boolean tokenExist();
  
     void logout();
 }

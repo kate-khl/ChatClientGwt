@@ -1,7 +1,15 @@
 package org.khl.chat.client.dto;
 
+import org.khl.chat.client.LoginService;
+import org.khl.chat.client.LoginServiceAsync;
+import org.khl.chat.client.component.LoginPage;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.Window;
 
 public enum AppData {
 	 
@@ -11,6 +19,8 @@ public enum AppData {
 //    private Long expMillis;
     private String token;
     private Long chatId;
+    
+	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
     
     public void setFields(UserDto userDto, Long expMillis, String token, Long chatId) {
     	this.userDto = userDto;
@@ -30,6 +40,26 @@ public enum AppData {
 //    		return true;
 //    	else return false;
 //    }
+    
+    public void checkToken() {
+    	
+    	loginService.tokenExist(new AsyncCallback<Boolean>() { 
+    		
+    		@Override
+    		public void onFailure(Throwable caught) {
+    			Window.alert("Что-то пошло не так");
+    		}
+    		
+    		@Override
+    		public void onSuccess(Boolean valid) {
+    			if (valid) {
+    			}
+    			else {
+    				RootPanel.get().add(new LoginPage());
+    			}
+    		}
+    	});
+    }
     
 	public UserDto getUserDto() {
 		return userDto;

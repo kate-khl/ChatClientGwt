@@ -1,6 +1,7 @@
 package org.khl.chat.client;
 
 import org.khl.chat.client.component.LoginPage;
+import org.khl.chat.client.dto.AppData;
 import org.khl.chat.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -22,8 +23,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ChatClient implements EntryPoint {
+	
+	public  AppData appData = AppData.INSTANCE;
 
 	public void onModuleLoad() {
-		RootPanel.get().add(new LoginPage());
+		appData.checkToken();
 	}
 }

@@ -8,7 +8,7 @@ public interface LoginServiceAsync {
 	
     void login(String token, AsyncCallback<Void> callback);
 
-	void tokenExist(String a, AsyncCallback<Boolean> callback);
+	void tokenExist(AsyncCallback<Boolean> callback);
 
 	void logout(AsyncCallback<Void> callback);
 }

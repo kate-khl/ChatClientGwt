@@ -10,8 +10,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService
 {
-    private static final long serialVersionUID = 4456105400553118785L;
- 
+
+	private static final long serialVersionUID = 1L;
+
 	@Override
     public void login(String token)
     {
@@ -19,7 +20,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
     }
  
     @Override
-    public boolean tokenExist(String a)
+    public boolean tokenExist()
     {
         if (getTokenFromSession() != null)
 			return true;
@@ -37,6 +38,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
         HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
         HttpSession session = httpServletRequest.getSession();
         String token = (String) session.getAttribute("token");
+        System.out.println(token + "lalala");
         return token;
     }
  
