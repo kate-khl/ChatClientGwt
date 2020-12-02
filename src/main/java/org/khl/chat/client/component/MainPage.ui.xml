@@ -1,0 +1,9 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:k='urn:import:org.khl.chat.client.component'>
+	<g:AbsolutePanel>
+    	<g:TabLayoutPanel 
+    		ui:field="tabPanel" barHeight="30" barUnit="PX" animationDuration="500" height="300" width="100%">
+    	</g:TabLayoutPanel>
+	</g:AbsolutePanel>
+</ui:UiBinder>

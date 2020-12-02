@@ -43,6 +43,8 @@ public class RegistrationPage extends Composite {
 	@UiField
 	Button btnSignUp;
 	@UiField
+	Button btnSignIn;
+	@UiField
 	TextBox tbPassword;
 	@UiField
 	TextBox tbEmail;
@@ -61,9 +63,16 @@ public class RegistrationPage extends Composite {
 				sendSignUpRest(jsonBody);
 			}
 		});
+		
+		btnSignIn.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				RootPanel.get().clear();
+				RootPanel.get().add(new LoginPage());
+			}
+		});
 	}
 	
-	 
 	 private void sendSignUpRest(final String jsonString) {
 		 RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL_SIGN_UP);
 		 
@@ -85,7 +94,6 @@ public class RegistrationPage extends Composite {
 					 } else {
 						 Window.alert("Что-то пошло не так: "+ response.getStatusText());
 					 }
-					 
 				 }
 			 });
 			 builder.send();

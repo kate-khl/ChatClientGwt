@@ -1,5 +1,10 @@
 package org.khl.chat.client.component;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.khl.chat.client.LoginService;
+import org.khl.chat.client.LoginServiceAsync;
 import org.khl.chat.client.dto.AppData;
 import org.khl.chat.client.dto.LoginRequestDto;
 import org.khl.chat.client.dto.LoginResponseDto;
@@ -20,9 +25,11 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,6 +45,7 @@ public class LoginPage extends Composite {
 
 	private static LoginPageUiBinder ourUiBinder = GWT.create(LoginPageUiBinder.class);
 	private Widget widget = ourUiBinder.createAndBindUi(this);
+	private static LoginServiceAsync loginService = GWT.create(LoginService.class); 
 	
 	
 	@UiField
@@ -45,18 +53,23 @@ public class LoginPage extends Composite {
 	@UiField
 	Button btnSignUp;
 	@UiField
-	TextBox tbPassword;
+	PasswordTextBox tbPassword;
 	@UiField
 	TextBox tbEmail;
+//	@UiField
+//	Grid dataGrid;
 	
 	public LoginPage(){
 		initWidget(widget);
+
+//		dataGrid = new Grid(null);
 		
 		btnSignIn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				LoginRequestDto loginRequest = new LoginRequestDto(tbEmail.getText(), tbPassword.getText());
 				String jsonBody = loginRequest.getJson();
+				GWT.debugger();
 				sendSignInRest(jsonBody);
 			}
 		});
@@ -71,58 +84,45 @@ public class LoginPage extends Composite {
 	}
 	
 	 private void sendSignInRest(final String jsonString) {
-	        RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL_SIGN_IN);
+		 GWT.debugger();
+        RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL_SIGN_IN);
 
-	        try {
-	            builder.setHeader(CONTENT_TYPE, "application/json");
-	            builder.setRequestData(jsonString);
-	            builder.setCallback( new RequestCallback() {
-	                public void onError(Request request, Throwable exception) {
-	                    Window.alert(exception.getMessage());
-	                }
-	                public void onResponseReceived(Request request, Response response) {
-	                    if (200 == response.getStatusCode()){
-		                	String responseJson = response.getText();
-		                	appData.setFieldsFromJson(responseJson);
-	                    } 
-	                    else {
-	                        Window.alert("Что-то пошло не так: " + response.getStatusText());
-	                    }
-	                }
-	            });
-	            builder.send();
-	        } catch (RequestException e) {
-	            e.printStackTrace();
-	        }
-	 }
-	 
-	 private void sendSignUpRest(final String jsonString) {
-		 RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL_SIGN_UP);
-		 
-		 try {
-			 builder.setHeader(CONTENT_TYPE, "application/json");
-			 builder.setRequestData(jsonString);
-			 builder.setCallback( new RequestCallback() {
-				 public void onError(Request request, Throwable exception) {
-					 Window.alert(exception.getMessage());
-				 }
-				 public void onResponseReceived(Request request, Response response) {
-					 JSONObject jobj = JSONParser.parseStrict(response.getText()).isObject();
-					 UserDto user = UserDto.fromJson(jobj);
-					 if (201 == response.getStatusCode())
-					 {
-						 Window.alert("Пользователь " + user.getName() + " зарегистрирован. \nМожете авторизоваться.");
-						 
-					 } else {
-						 Window.alert("Что-то пошло не так: "+ response.getStatusText());
-					 }
-					 
-				 }
-			 });
-			 builder.send();
-		 } catch (RequestException e) {
-			 System.out.println(e.getMessage());;
-		 }
+        try {
+            builder.setHeader(CONTENT_TYPE, "application/json");
+            builder.setRequestData(jsonString);
+            builder.setCallback( new RequestCallback() {
+                public void onError(Request request, Throwable exception) {
+                	GWT.debugger();
+                    Window.alert(exception.getMessage());
+                }
+                public void onResponseReceived(Request request, Response response) {
+                	GWT.debugger();
+                    if (200 == response.getStatusCode()){
+	                	String responseJson = response.getText();
+	                	appData.setFieldsFromJson(responseJson);
+	                	loginService.login(appData.getToken(), new AsyncCallback<Void>() {
+							
+							@Override
+							public void onSuccess(Void result) {
+								RootPanel.get().clear();
+								RootPanel.get().add(new MainPage());
+							}
+							
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert(caught.getMessage());
+							}
+						});
+                    } 
+                    else {
+                        Window.alert("Что-то пошло не так: " + response.getStatusText());
+                    }
+                }
+            });
+            builder.send();
+        } catch (RequestException e) {
+            e.printStackTrace();
+        }
 	 }
 }
 

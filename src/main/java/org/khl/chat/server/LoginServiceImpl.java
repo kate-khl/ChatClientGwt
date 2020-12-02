@@ -33,12 +33,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
         deleteUserFromSession();
     }
  
-    private String getTokenFromSession()
+    public String getTokenFromSession()
     {
         HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
         HttpSession session = httpServletRequest.getSession();
         String token = (String) session.getAttribute("token");
-        System.out.println(token + "lalala");
         return token;
     }
  

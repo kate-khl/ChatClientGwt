@@ -13,4 +13,6 @@ public interface LoginService extends RemoteService{
     boolean tokenExist();
  
     void logout();
+    
+    String getTokenFromSession();
 }

@@ -11,4 +11,6 @@ public interface LoginServiceAsync {
 	void tokenExist(AsyncCallback<Boolean> callback);
 
 	void logout(AsyncCallback<Void> callback);
+	
+	void getTokenFromSession(AsyncCallback<String> callback);
 }

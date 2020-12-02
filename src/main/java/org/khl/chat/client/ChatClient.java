@@ -1,7 +1,12 @@
 package org.khl.chat.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.khl.chat.client.component.Grid;
 import org.khl.chat.client.component.LoginPage;
 import org.khl.chat.client.dto.AppData;
+import org.khl.chat.client.dto.UserDto;
 import org.khl.chat.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

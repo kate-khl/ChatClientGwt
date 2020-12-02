@@ -1,0 +1,48 @@
+<ui:UiBinder
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:c='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:s="urn:import:org.khl.chat.client.component">
+
+  <ui:style>
+    .scrollable {
+      height: 400px;
+      width: 250px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    
+    .contactFormCell {
+      padding-left: 20px;
+    }
+  </ui:style>
+
+  <g:HTMLPanel>
+    <table>
+      <tr>
+        <td
+          valign='top'
+          align='center'>
+          <s:ShowMorePagerPanel
+            addStyleNames='{style.scrollable}'
+            ui:field='pagerPanel' />
+          <s:RangeLabelPager
+            ui:field='rangeLabelPager' />
+        </td>
+        <td
+          class='{style.contactFormCell}'
+          valign='top'
+          align='center'>
+          <!-- Messages -->
+        </td>
+      </tr>
+      <tr>
+        <td
+          align='center'>
+          <s:ShowMorePagerPanel
+            ui:field='pager' />
+        </td>
+      </tr>
+    </table>
+  </g:HTMLPanel>
+</ui:UiBinder>
