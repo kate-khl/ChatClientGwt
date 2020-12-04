@@ -7,7 +7,7 @@
   <ui:style>
     .scrollable {
       height: 400px;
-      width: 250px;
+      width: 550px;
       border: 1px solid #ccc;
       text-align: left;
     }
@@ -23,18 +23,11 @@
         <td
           valign='top'
           align='center'>
+          <s:RangeLabelPager
+            ui:field='rangeLabelPager' />
           <s:ShowMorePagerPanel
             addStyleNames='{style.scrollable}'
             ui:field='pagerPanel' />
-          <s:RangeLabelPager
-            ui:field='rangeLabelPager' />
-        </td>
-        <td
-          class='{style.contactFormCell}'
-          valign='top'
-          align='center'>
-          <g:Label ui:field="lable1" text="JJJ!!!"></g:Label>
-   <!-- 	<s:MessagesForm ui:field="messagesForm" />   -->    
         </td>
       </tr>
       <tr>

@@ -6,7 +6,7 @@
     	<g:Label text="Email"></g:Label>
     	<g:TextBox ui:field="tbEmail"></g:TextBox>
     	<g:Label text="Password"></g:Label>
-    	<g:TextBox ui:field="tbPassword"></g:TextBox>
+    	<g:PasswordTextBox ui:field="tbPassword"></g:PasswordTextBox>
     	<g:Button ui:field="btnSignUp" text="Зарегистрироваться"></g:Button>
     	<g:Button ui:field="btnSignIn" text="Авторизация"></g:Button>
 	</g:AbsolutePanel>

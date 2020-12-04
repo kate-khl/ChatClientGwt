@@ -1,27 +1,18 @@
 package org.khl.chat.client.component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.khl.chat.client.LoginService;
 import org.khl.chat.client.LoginServiceAsync;
 import org.khl.chat.client.dto.AppData;
 import org.khl.chat.client.dto.LoginRequestDto;
-import org.khl.chat.client.dto.LoginResponseDto;
-import org.khl.chat.client.dto.UserDto;
+import org.khl.chat.client.utils.MyRequestCallback;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
-import com.google.gwt.http.client.URL;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
@@ -90,18 +81,18 @@ public class LoginPage extends Composite {
         try {
             builder.setHeader(CONTENT_TYPE, "application/json");
             builder.setRequestData(jsonString);
-            builder.setCallback( new RequestCallback() {
+            builder.setCallback( new MyRequestCallback() {
                 public void onError(Request request, Throwable exception) {
-                	GWT.debugger();
                     Window.alert(exception.getMessage());
                 }
-                public void onResponseReceived(Request request, Response response) {
+
+				@Override
+				public void onOk(Request request, Response response) {
                 	GWT.debugger();
                     if (200 == response.getStatusCode()){
 	                	String responseJson = response.getText();
 	                	appData.setFieldsFromJson(responseJson);
 	                	loginService.login(appData.getToken(), new AsyncCallback<Void>() {
-							
 							@Override
 							public void onSuccess(Void result) {
 								RootPanel.get().clear();
@@ -117,7 +108,7 @@ public class LoginPage extends Composite {
                     else {
                         Window.alert("Что-то пошло не так: " + response.getStatusText());
                     }
-                }
+				}
             });
             builder.send();
         } catch (RequestException e) {

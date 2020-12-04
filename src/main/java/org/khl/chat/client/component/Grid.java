@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.khl.chat.client.dto.AppData;
 import org.khl.chat.client.dto.UserDto;
+import org.khl.chat.client.utils.MyRequestCallback;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
@@ -68,7 +69,6 @@ public class Grid extends Composite{
 	    dataGrid.setSelectionModel(selectionModel, DefaultSelectionEventManager.createCheckboxManager());
 	
 	    dataProvider.addDataDisplay(dataGrid);
-//	    dataProvider.setList(users);
 	    
 	    initColumns();
 	    initPager();
@@ -104,17 +104,14 @@ public class Grid extends Composite{
 	
 	private void getUsersList() {
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL_GET_USERS);
-		String s = AppData.INSTANCE.getToken();
 		builder.setHeader("Authorization", AppData.INSTANCE.getToken());
 		try {
-			builder.setCallback( new RequestCallback() {
+			builder.setCallback( new MyRequestCallback() {
 				public void onError(Request request, Throwable exception) {
 					Window.alert(exception.getMessage());
 				}
-				public void onResponseReceived(Request request, Response response) {
+				public void onOk(Request request, Response response) {
 					
-					int f = response.getStatusCode();
-					GWT.debugger();
 					if (200 == response.getStatusCode()){
 						String ss = response.getText();
 						JSONValue jval = JSONParser.parseStrict(response.getText());
